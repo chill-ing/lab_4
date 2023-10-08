@@ -1,65 +1,67 @@
 #include <stdio.h>
 #include <math.h>
 
-double tabulateTable1(double x) {
-    if (x < 3) {
-        return cos(pow(x, 0.3));
-    } else if (x >= 3 && x < 4) {
-        return sqrt(pow(x, 3) + log10(x));
+double tabulateTable1(double number) {
+    if (number < 3) {
+        return cos(pow(number, 0.3));
+    } else if (number >= 3 && number < 4) {
+        return sqrt(pow(number, 3) + log10(number));
     } else {
-        return 1.0 / tan(pow(x, 2));
+        return 1.0 / tan(pow(number, 2));
     }
 }
 
-double tabulateTable2(double x, double d) {
-    double result = 0;
-    double term = 0;
-    int n = 1;
+double tabulateTable2(double start, double number, double end, double step) {
+    double sum = 0.0;
+    double n;
 
-    while (1) {
-        term = (2.0 / ((2 * n + 1) * (x + 1)));
-        
-        if (fabs(term) < d) {
-            break;
-        }
-        
-        if (n % 2 == 0) {
-            result -= term * pow(x - 1, 2 * n + 1);
-        } else {
-            result += term * pow(x - 1, 2 * n + 1);
-        }
-        
-        n++;
+    for (n = start; n <= end; n += step) {
+        double result = pow(number - 1, 2 * n + 1) / ((2 * n + 1) * pow(number + 1, 2 * n + 1));
+        printf("%.2lf\t%.6lf\n", n, result);
+        sum += result;
     }
-    
-    return result;
+
+    return sum;
 }
 
 int main() {
-    double initial = 2.0;
-    double final = 5.0;
-    double step = 0.2;
+    double initial, final, step_1;
 
-    double a2 = 1.0;
-    double b2 = 1.2;
-    double h2 = 0.02;
-    double d2 = 1e-6;
+    printf("Enter initial point of start: ");
+    scanf("%lf", &initial); // 2.0
+
+    printf("Enter final point of end: ");
+    scanf("%lf", &final); // 5.0
+
+    printf("Enter step of calculation: ");
+    scanf("%lf", &step_1); // 0.2
 
     printf("Table 1:\n");
     printf("x\tf(x)\n");
     
-    for (double x = initial; x <= final; x += step) {
+    for (double x = initial; x <= final; x += step_1) {
         double result = tabulateTable1(x);
         printf("%.2lf\t%.6lf\n", x, result);
     }
 
+    double start, end, step_2, x;
+
+    printf("Enter initial point of start: ");
+    scanf("%lf", &start); // 1.0
+
+    printf("Enter final point of end: ");
+    scanf("%lf", &end); // 1.2
+
+    printf("Enter step of calculation: ");
+    scanf("%lf", &step_2); // 0.02
+
+    printf("Enter x for calculation: ");
+    scanf("%lf", &x);
+
     printf("\nTable 2:\n");
     printf("x\tf(x)\n");
     
-    for (double x = a2; x <= b2; x += h2) {
-        double result = tabulateTable2(x, d2);
-        printf("%.2lf\t%.6lf\n", x, result);
-    }
+    double sum = tabulateTable2(start, x, end, step_2);
 
     return 0;
 }
