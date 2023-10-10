@@ -11,17 +11,18 @@ double tabulateTable1(double number) {
     }
 }
 
-double tabulateTable2(double start, double number, double end, double step) {
-    double sum = 0.0;
-    double n;
+double tabulateTable2(double x, double a, double b, double h, double error) {
+    double result = 0;
+    double term;
+    int n = 1;
 
-    for (n = start; n <= end; n += step) {
-        double result = pow(number - 1, 2 * n + 1) / ((2 * n + 1) * pow(number + 1, 2 * n + 1));
-        printf("%.2lf\t%.6lf\n", n, result);
-        sum += result;
-    }
+    do {
+        term = (pow(x - 1, 2 * n + 1) / ((2 * n + 1) * pow(x + 1, 2 * n + 1)));
+        result += term;
+        n++;
+    } while (fabs(term) >= error);
 
-    return sum;
+    return result;
 }
 
 int main() {
@@ -44,7 +45,7 @@ int main() {
         printf("%.2lf\t%.6lf\n", x, result);
     }
 
-    double start, end, step_2, x;
+    double start, end, step_2, error, x;
 
     printf("Enter initial point of start: ");
     scanf("%lf", &start); // 1.0
@@ -55,13 +56,16 @@ int main() {
     printf("Enter step of calculation: ");
     scanf("%lf", &step_2); // 0.02
 
-    printf("Enter x for calculation: ");
-    scanf("%lf", &x);
+    printf("Enter error: ");
+    scanf("%lf", &error); // 10^-6
 
     printf("\nTable 2:\n");
     printf("x\tf(x)\n");
     
-    double sum = tabulateTable2(start, x, end, step_2);
+    for (x = start; x <= end; x += step_2) {
+        double result = tabulateTable2(x, start, end, step_2, error);
+        printf("%.2lf\t%.6lf\n", x, result);
+    }
 
     return 0;
 }
