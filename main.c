@@ -1,71 +1,81 @@
 #include <stdio.h>
 #include <math.h>
 
-double tabulateTable1(double number) {
-    if (number < 3) {
-        return cos(pow(number, 0.3));
-    } else if (number >= 3 && number < 4) {
-        return sqrt(pow(number, 3) + log10(number));
-    } else {
-        return 1.0 / tan(pow(number, 2));
+void sortMatrixRows(int rows, int cols, int matrix[rows][cols]) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 1; j < cols; j++) {
+            int key = matrix[i][j];
+            int k = j - 1;
+
+            while (k >= 0 && matrix[i][k] < key) {
+                matrix[i][k + 1] = matrix[i][k];
+                k = k - 1;
+            }
+
+            matrix[i][k + 1] = key;
+        }
     }
 }
 
-double tabulateTable2(double x, double a, double b, double h, double error) {
-    double result = 0;
-    double term;
-    int n = 1;
+void calculateSum(int rows, int cols, int matrix[rows][cols], int sum[cols]) {
+    for (int j = 0; j < cols; j++) {
+        sum[j] = 0;
+        for (int i = j + 1; i < rows; i++) {
+            sum[j] += matrix[i][j];
+        }
+    }
+}
 
-    do {
-        term = (pow(x - 1, 2 * n + 1) / ((2 * n + 1) * pow(x + 1, 2 * n + 1)));
-        result += term;
-        n++;
-    } while (fabs(term) >= error);
-
-    return result;
+double calculateGeometricMean(int cols, int sum[cols]) {
+    double product = 1.0;
+    for (int j = 0; j < cols; j++) {
+        product *= sum[j];
+    }
+    return pow(product, 1.0 / cols);
 }
 
 int main() {
-    double initial, final, step_1;
+    int rows, cols;
+    printf("Enter the number of rows and columns for the matrix:\n ");
+    scanf("%d %d", &rows, &cols);
 
-    printf("Enter initial point of start: ");
-    scanf("%lf", &initial); // 2.0
+    int matrix[rows][cols];
 
-    printf("Enter final point of end: ");
-    scanf("%lf", &final); // 5.0
+    printf("\n");
 
-    printf("Enter step of calculation: ");
-    scanf("%lf", &step_1); // 0.2
-
-    printf("Table 1:\n");
-    printf("x\tf(x)\n");
-    
-    for (double x = initial; x <= final; x += step_1) {
-        double result = tabulateTable1(x);
-        printf("%.2lf\t%.6lf\n", x, result);
+    printf("Enter the elements of the matrix:\n");
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            scanf("%d", &matrix[i][j]);
+        }
     }
 
-    double start, end, step_2, error, x;
+    sortMatrixRows(rows, cols, matrix);
 
-    printf("Enter initial point of start: ");
-    scanf("%lf", &start); // 1.0
+    int sum[cols];
+    calculateSum(rows, cols, matrix, sum);
 
-    printf("Enter final point of end: ");
-    scanf("%lf", &end); // 1.2
+    printf("\n");
 
-    printf("Enter step of calculation: ");
-    scanf("%lf", &step_2); // 0.02
-
-    printf("Enter error: ");
-    scanf("%lf", &error); // 10^-6
-
-    printf("\nTable 2:\n");
-    printf("x\tf(x)\n");
-    
-    for (x = start; x <= end; x += step_2) {
-        double result = tabulateTable2(x, start, end, step_2, error);
-        printf("%.2lf\t%.6lf\n", x, result);
+    printf("Sorted Matrix:\n");
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%d\t", matrix[i][j]);
+        }
+        printf("\n");
     }
+
+    printf("\n");
+
+    printf("Sum values:\n");
+    for (int j = 0; j < cols; j++) {
+        printf("Sum(col%d) = %d\n", j, sum[j]);
+    }
+
+    printf("\n");
+
+    double Gm = calculateGeometricMean(cols, sum);
+    printf("Geometric Mean = %lf\n\n", Gm);
 
     return 0;
 }
