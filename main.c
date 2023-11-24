@@ -26,12 +26,12 @@ void calculateSum(int rows, int cols, int matrix[rows][cols], int sum[cols-1]) {
     }
 }
 
-double calculateGeometricMean(int cols, int sum[cols-1]) {
+double calculateGeometricMean(int cols, int sum[cols - 1]) {
     double product = 1.0;
-    for (int j = 0; j < cols-1; j++) {
+    for (int j = 0; j < cols - 1; j++) {
         product *= sum[j];
     }
-    return pow(product, 1.0 / (cols-1));
+    return pow(product, 1.0 / (cols - 1));
 }
 
 int main() {
@@ -67,7 +67,7 @@ int main() {
 
     printf("\n");
 
-    printf("Sum values (excluding last column):\n");
+    printf("Sum values:\n");
     for (int j = 0; j < cols-1; j++) {
         printf("Sum(col%d) = %d\n", j, sum[j]);
     }
@@ -75,7 +75,7 @@ int main() {
     printf("\n");
 
     double Gm = calculateGeometricMean(cols, sum);
-    printf("Geometric Mean (excluding last column) = %lf\n\n", Gm);
+    printf("Geometric Mean = %lf\n\n", Gm);
 
     return 0;
 }
